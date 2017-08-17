@@ -42,8 +42,7 @@ if col == -1:
 
 
 # set the refernce time
-b= map(int,re.split('/|-| +|:|\.',t0))
-time0 = dt( b[2]+2000, b[1], b[0], b[3], b[4], b[5] )
+time0 = dt.strptime( t0,"%d/%m/%y %H:%M:%S")
 
 # Read a date/time from the Oxygen data
 data_found = False 
