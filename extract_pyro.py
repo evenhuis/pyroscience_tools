@@ -23,8 +23,8 @@ except getopt.GetoptError as err:
 
 col = -1
 string=0
-t0="23/09/16 00:00:00"
 
+time0=None
 for o, a in opts:
     if   o == "-h":
         usage()
@@ -36,7 +36,7 @@ for o, a in opts:
     elif o =="-s":
         string=1
     elif o =="-t":
-        t0=a
+        time0 = dt.datetime.strptime( a,"%d/%m/%y %H:%M:%S")
 
 if col == -1:
     print("ERROR : columns not set ")
@@ -44,7 +44,6 @@ if col == -1:
 
 
 # set the refernce time
-time0 = dt.datetime.strptime( t0,"%d/%m/%y %H:%M:%S")
 
 # Read a date/time from the Oxygen data
 data_found = False 
@@ -57,12 +56,14 @@ for line in fileinput.sys.stdin:
 
     if data_found : 
         time1 = dt.datetime.strptime("{} {}".format(a[0],a[1]), "%d/%m/%Y %H:%M:%S" )
+        if( time0 is None ):
+            time0 = dt.datetime.strptime(a[0],"%d/%m/%Y")
 
         # calculate the difference in days
         time = (time1-time0)/dt.timedelta(days=1)
 
         # save the variable
-        if string :
+        if( string ) :
             var = a[col+1]
             var.replace("\n","")
             if( len(var)>1):
